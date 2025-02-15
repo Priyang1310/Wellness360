@@ -32,9 +32,43 @@ function DietPlanForm() {
 
         if (!bmiValue) return; // Stop execution if BMI calculation fails
 
-        const content = `Generate a structured diet plan for ${days} days for a person with a BMI of ${bmiValue}. Format it using markdown. Generate for a ${
-            vegNonveg === "0" ? "Vegetarian" : "Non-Vegetarian"
-        } diet.`;
+        const content = `You are a **highly experienced professional nutritionist**. Your task is to create a **comprehensive, structured, and well-detailed diet plan** tailored to the individual's needs based on the following details:  
+
+        - **📅 Duration:** ${days} days  
+        - **⚖️ BMI:** ${bmi}  
+        - **🥗 Diet Preference:** ${
+                    vegNonveg === "0" ? "Vegetarian" : "Non-Vegetarian"
+                }  
+        🔹 **Nutritional Information:** Include the **calorie count, protein, carbs, and fats** for each meal to ensure a well-balanced diet.  
+
+        🔹 Give Daywise dietplan breaking a day food into breakfast, lunch, dinner or whatever they are
+
+        🔹 **Hydration & Supplement Tips:**  
+          - Recommend **daily water intake** based on BMI and activity level.  
+          - Suggest **vitamins or supplements** if necessary for overall health.  
+
+        🔹 **Customization Based on BMI:**  
+          - **BMI < 18.5 (Underweight):** Focus on **healthy weight gain**, high-protein, high-calorie, and nutrient-dense meals.  
+          - **BMI 18.5 - 24.9 (Normal Weight):** Emphasize **balanced nutrition** to maintain an optimal weight and energy levels.  
+          - **BMI > 25 (Overweight):** Focus on **healthy weight loss** with high-fiber, low-calorie, and metabolism-boosting foods.  
+
+        🔹 **Special Diet Enhancements:**  
+          - Offer **alternative food options** for allergies or dietary restrictions.  
+          - Provide **precise portion sizes** based on BMI and calorie needs.  
+          - Include **easy-to-follow, quick recipes** for key meals.  
+
+        🔹 **Daily Health Tips & Motivation:**  
+          - Give **practical health tips** each day.  
+          - Include **motivation or simple exercises** to complement the diet plan.  
+
+        ### **🔷 Formatting Guidelines:**  
+        - **Use headings, bullet points, tables, and sections** for easy readability.  
+        - **Ensure a structured and professional tone** throughout the response.  
+        - **Make the plan engaging, actionable, and practical for real-world use.**  
+
+        Generate a **detailed and well-organized diet plan** that aligns with these guidelines amd also dont give it in tabular format.
+        Give response as a markdown code.  
+        `;
 
         try {
             const response = await fetch("http://localhost:3333/api/ask", {
@@ -143,7 +177,6 @@ function DietPlanForm() {
             {/* Display Diet Plan using react-markdown */}
             {dietPlan && (
                 <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                    
                     <div className="bg-gray-900 text-white p-6 rounded-xl shadow-lg max-w-3xl mx-auto">
                         <ReactMarkdown
                             children={dietPlan}
