@@ -1,20 +1,19 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
-import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas";
+
+
 
 function DietPlanForm() {
-    const [days, setDays] = useState("");
-    const [weight, setWeight] = useState("");
-    const [height, setHeight] = useState("");
-    const [bmi, setBmi] = useState(null);
-    const [dietPlan, setDietPlan] = useState(null);
-    const [vegNonveg, setVegNonveg] = useState("0"); // Default: Vegetarian (0)
-    
-    const dietRef = useRef(); // Reference to diet plan div
+  const [days, setDays] = useState("");
+  const [weight, setWeight] = useState("");
+  const [height, setHeight] = useState("");
+  const [bmi, setBmi] = useState(null);
+  const [dietPlan, setDietPlan] = useState(null);
+  const [vegNonveg, setVegNonveg] = useState("0"); // Default: Vegetarian (0)
+  
 
-    // Function to calculate BMI
+  // Function to calculate BMI
     const calculateBMI = () => {
         if (weight && height) {
             const heightInMeters = height / 100;
@@ -85,20 +84,6 @@ function DietPlanForm() {
         }
     };
 
-    // Function to download the diet plan as a PDF
-    const downloadAsPDF = () => {
-        const input = dietRef.current;
-        html2canvas(input, { scale: 2 }).then((canvas) => {
-            const imgData = canvas.toDataURL("image/png");
-            const pdf = new jsPDF("p", "mm", "a4");
-            const imgWidth = 190;
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            
-            pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
-            pdf.save(`Diet_Plan_${days}Days.pdf`);
-        });
-    };
-
     return (
         <div className="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6 mt-10">
             <h2 className="text-3xl font-bold text-center text-green-800 mb-6">
@@ -165,8 +150,8 @@ function DietPlanForm() {
 
             {/* Display Diet Plan */}
             {dietPlan && (
-                <div ref={dietRef} className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                    <div className="bg-gray-900 text-white p-6 rounded-xl shadow-lg max-w-3xl mx-auto">
+                <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <div id="format" className="bg-gray-900 text-white p-6 rounded-xl shadow-lg max-w-3xl mx-auto">
                         <ReactMarkdown
                             children={dietPlan}
                             remarkPlugins={[remarkGfm]}
@@ -193,15 +178,6 @@ function DietPlanForm() {
                 </div>
             )}
 
-            {/* Download as PDF Button */}
-            {dietPlan && (
-                <button
-                    onClick={downloadAsPDF}
-                    className="mt-4 w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all duration-300"
-                >
-                    Download as PDF 📄
-                </button>
-            )}
         </div>
     );
 }
