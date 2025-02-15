@@ -1,1 +1,4 @@
 @import "tailwindcss";
+.backdrop-blur-md {
+    backdrop-filter: blur(5px) !important;
+}
