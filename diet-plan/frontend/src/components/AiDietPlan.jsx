@@ -38,9 +38,9 @@ function DietPlanForm() {
       });
 
       const data = await response.json();
-      console.log(data);
+      console.log(data.response);
 
-      setDietPlan(data.dietPlan);
+      setDietPlan(data.response);
     } catch (error) {
       console.error("Error fetching diet plan:", error);
       setDietPlan("Failed to fetch diet plan. Please try again!");
