@@ -1,3 +1,1 @@
-module.exports={
-    
-}
+export * from './aiService.js';

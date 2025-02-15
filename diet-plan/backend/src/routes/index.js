@@ -1,9 +1,5 @@
-const express = require("express");
-const v1Routes = require("./v1");
+import askRoute from './askRoute.js';
 
-const router = express.Router();
-
-router.use("/v1", v1Routes);
-
-module.exports = router;
-    
+export default (app) => {
+  app.use('/api', askRoute);
+};
