@@ -16,11 +16,8 @@ const Landing = ({isAuthenticated}) => {
       <div className={`min-h-screen bgNoise flex items-center justify-center`}>
         <div className="text-center">
           <h1 className="text-white text-5xl md:text-7xl font-bold mb-6">
-            Welcome to <span  style={{color:"aqua"}}> Chat with Database</span>
+            Welcome to <span  style={{color:"aqua"}}> Wellness360</span>
           </h1>
-          <p className="text-gray-300 text-lg md:text-2xl mb-12">
-            Discover the amazing features and join our community today!
-          </p>
           <div className="flex justify-center space-x-4">
             <button className={'btnSignin'} onClick={() => loginWithRedirect()}>Log In</button>\
           </div>
