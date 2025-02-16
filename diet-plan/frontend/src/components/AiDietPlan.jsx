@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
 import Loader from "./Loader"; // Import the Loader component
@@ -30,47 +30,57 @@ function DietPlanForm() {
             return null;
         }
     };
+    useEffect(() => {
+        if (loading) {
+            document.body.style.overflow = "hidden"; // Disable scrolling
+        } else {
+            document.body.style.overflow = "auto"; // Enable scrolling
+        }
+        return () => {
+            document.body.style.overflow = "auto"; // Cleanup when unmounting
+        };
+    }, [loading]);
 
     // Function to fetch diet plan from backend API
     const fetchDietPlan = async () => {
         const bmiValue = calculateBMI();
         if (!bmiValue) return;
 
-        const content = `You are a **highly experienced professional nutritionist**. Your task is to create a **comprehensive, structured, and well-detailed diet plan** tailored to the individual's needs based on the following details:  
+        const content = `You are a *highly experienced professional nutritionist. Your task is to create a **comprehensive, structured, and well-detailed diet plan* tailored to the individual's needs based on the following details:  
 
-        - **📅 Duration:** ${days} days  
-        - **⚖️ BMI:** ${bmi}  
-        - **🥗 Diet Preference:** ${
+        - *📅 Duration:* ${days} days  
+        - *⚖ BMI:* ${bmi}  
+        - *🥗 Diet Preference:* ${
             vegNonveg === "0" ? "Vegetarian" : "Non-Vegetarian"
         }  
-        🔹 **Nutritional Information:** Include the **calorie count, protein, carbs, and fats** for each meal to ensure a well-balanced diet.  
+        🔹 *Nutritional Information:* Include the *calorie count, protein, carbs, and fats* for each meal to ensure a well-balanced diet.  
 
         🔹 Give Daywise dietplan breaking a day food into breakfast, lunch, dinner or whatever they are
 
-        🔹 **Hydration & Supplement Tips:**  
-          - Recommend **daily water intake** based on BMI and activity level.  
-          - Suggest **vitamins or supplements** if necessary for overall health.  
+        🔹 *Hydration & Supplement Tips:*  
+          - Recommend *daily water intake* based on BMI and activity level.  
+          - Suggest *vitamins or supplements* if necessary for overall health.  
 
-        🔹 **Customization Based on BMI:**  
-          - **BMI < 18.5 (Underweight):** Focus on **healthy weight gain**, high-protein, high-calorie, and nutrient-dense meals.  
-          - **BMI 18.5 - 24.9 (Normal Weight):** Emphasize **balanced nutrition** to maintain an optimal weight and energy levels.  
-          - **BMI > 25 (Overweight):** Focus on **healthy weight loss** with high-fiber, low-calorie, and metabolism-boosting foods.  
+        🔹 *Customization Based on BMI:*  
+          - *BMI < 18.5 (Underweight):* Focus on *healthy weight gain*, high-protein, high-calorie, and nutrient-dense meals.  
+          - *BMI 18.5 - 24.9 (Normal Weight):* Emphasize *balanced nutrition* to maintain an optimal weight and energy levels.  
+          - *BMI > 25 (Overweight):* Focus on *healthy weight loss* with high-fiber, low-calorie, and metabolism-boosting foods.  
 
-        🔹 **Special Diet Enhancements:**  
-          - Offer **alternative food options** for allergies or dietary restrictions.  
-          - Provide **precise portion sizes** based on BMI and calorie needs.  
-          - Include **easy-to-follow, quick recipes** for key meals.  
+        🔹 *Special Diet Enhancements:*  
+          - Offer *alternative food options* for allergies or dietary restrictions.  
+          - Provide *precise portion sizes* based on BMI and calorie needs.  
+          - Include *easy-to-follow, quick recipes* for key meals.  
 
-        🔹 **Daily Health Tips & Motivation:**  
-          - Give **practical health tips** each day.  
-          - Include **motivation or simple exercises** to complement the diet plan.  
+        🔹 *Daily Health Tips & Motivation:*  
+          - Give *practical health tips* each day.  
+          - Include *motivation or simple exercises* to complement the diet plan.  
 
-        ### **🔷 Formatting Guidelines:**  
-        - **Use headings, bullet points, tables, and sections** for easy readability.  
-        - **Ensure a structured and professional tone** throughout the response.  
-        - **Make the plan engaging, actionable, and practical for real-world use.**  
+        ### *🔷 Formatting Guidelines:*  
+        - *Use headings, bullet points, tables, and sections* for easy readability.  
+        - *Ensure a structured and professional tone* throughout the response.  
+        - *Make the plan engaging, actionable, and practical for real-world use.*  
 
-        Generate a **detailed and well-organized diet plan** that aligns with these guidelines amd also dont give it in tabular format.
+        Generate a *detailed and well-organized diet plan* that aligns with these guidelines amd also dont give it in tabular format.
         Give response as a markdown code.`;
 
         setLoading(true);
@@ -133,13 +143,14 @@ function DietPlanForm() {
         >
             <Navbar />
             {loading && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/60 backdrop-blur-md z-50">
+                <div className="fixed top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-white/60 backdrop-blur-lg z-50">
                     <Loader />
                     <p className="mt-4 text-lg font-semibold text-green-800">
                         Preparing your diet plan...
                     </p>
                 </div>
             )}
+
             <div
                 className={`max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6 mt-10 transition-all duration-300 ${
                     loading ? "blur-md pointer-events-none select-none" : ""
