@@ -11,12 +11,14 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-// app.use(cors());
+
+
 app.use(cors({
-  origin: ["http://localhost:5173", "https://wellness360.onrender.com"], // Allow frontend and Render domain
+  origin: ["http://localhost:5173", "https://wellness360.onrender.com"], // Allow frontend URLs
   methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type"]
+  allowedHeaders: ["Origin", "Content-Type", "Accept", "Authorization"]
 }));
+
 
 app.use(express.json());
 
