@@ -1,42 +1,48 @@
-import { cloudinary } from '../config/index.js';
-import { mdToPdf } from 'md-to-pdf';
-import { Readable } from 'stream';
+import PDFDocument from "pdfkit";
+import markdownIt from "markdown-it";
+import { Readable } from "stream";
+
+const md = new markdownIt();
 
 export const generateAndUploadPdf = async (markdownContent) => {
-  try {
-    // Generate PDF in memory
-    const pdf = await mdToPdf({ content: markdownContent });
+    try {
+        // Convert markdown to HTML (optional step for custom formatting)
+        const htmlContent = md.render(markdownContent);
 
-    if (!pdf || !pdf.content) {
-      throw new Error('PDF generation failed');
+        // Create a PDF document
+        const doc = new PDFDocument();
+
+        // Pipe the PDF output to a buffer
+        const buffers = [];
+        doc.on("data", buffers.push.bind(buffers));
+        doc.on("end", async () => {
+            const pdfBuffer = Buffer.concat(buffers);
+
+            // Convert buffer to readable stream
+            const pdfStream = Readable.from([pdfBuffer]);
+
+            const result = await new Promise((resolve, reject) => {
+                const uploadStream = cloudinary.uploader.upload_stream(
+                    {
+                        resource_type: "auto",
+                        folder: "pdfs",
+                    },
+                    (error, result) => {
+                        if (error) reject(error);
+                        else resolve(result);
+                    }
+                );
+                pdfStream.pipe(uploadStream);
+            });
+
+            return result.secure_url;
+        });
+
+        // Write content to the PDF
+        doc.text(htmlContent, { align: "left" });
+        doc.end();
+    } catch (error) {
+        console.error("PDF generation error:", error);
+        throw error;
     }
-
-    // Convert PDF buffer to a readable stream correctly
-    const pdfStream = Readable.from([pdf.content]);
-
-    // Upload PDF to Cloudinary
-    const result = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          resource_type: 'auto',
-          folder: 'pdfs',
-        },
-        (error, result) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(result);
-          }
-        }
-      );
-
-      // Pipe the PDF stream to Cloudinary
-      pdfStream.pipe(uploadStream);
-    });
-
-    return result.secure_url; // Return Cloudinary URL
-  } catch (error) {
-    console.error('Error in generateAndUploadPdf:', error);
-    throw error;
-  }
 };
