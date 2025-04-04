@@ -13,8 +13,8 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 // app.use(cors());
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:5173"], // Allow multiple origins
-  methods: ["GET", "POST"],
+  origin: ["http://localhost:5173", "https://wellness360.onrender.com"], // Allow frontend and Render domain
+  methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type"]
 }));
 
