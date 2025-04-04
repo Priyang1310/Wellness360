@@ -15,7 +15,7 @@ router.post('/ask', async (req, res, next) => {
     console.log(aiResponse)
     // Generate PDF and upload to Cloudinary
     const pdfUrl = await generateAndUploadPdf(aiResponse);
-
+    console.log(pdfUrl)
     // Save to MongoDB
     const conversation = new Conversation({
       content,
