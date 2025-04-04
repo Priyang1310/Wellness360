@@ -14,13 +14,13 @@ router.post('/ask', async (req, res, next) => {
 
     console.log(aiResponse)
     // Generate PDF and upload to Cloudinary
-    const pdfUrl = await generateAndUploadPdf(aiResponse);
+    // const pdfUrl = await generateAndUploadPdf(aiResponse);
 
     // Save to MongoDB
     const conversation = new Conversation({
       content,
       response: aiResponse,
-      pdfUrl,
+      // pdfUrl,
     });
 
     const savedConversation = await conversation.save();
@@ -28,7 +28,7 @@ router.post('/ask', async (req, res, next) => {
     res.json({
       success: true,
       response: aiResponse,
-      pdfUrl,
+      // pdfUrl,
       dbRecord: savedConversation,
     });
   } catch (error) {

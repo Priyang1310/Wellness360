@@ -86,7 +86,7 @@ function DietPlanForm() {
         setLoading(true);
 
         try {
-            const response = await fetch("http://localhost:3333/api/ask", {
+            const response = await fetch("https://wellness360.onrender.com/api/ask", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ content }),
@@ -113,7 +113,7 @@ function DietPlanForm() {
         }
 
         try {
-            const response = await fetch("http://localhost:3333/generate-pdf", {
+            const response = await fetch("https://wellness360.onrender.com/generate-pdf", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ markdown: dietPlan }),
