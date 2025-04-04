@@ -12,11 +12,18 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 // app.use(cors());
-app.use(cors({
-  origin: ["http://localhost:5173", "https://wellness360.onrender.com"], // Allow frontend and Render domain
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type"]
-}));
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*"); // Allow all origins (for testing)
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization");
+  
+  // Handle preflight requests
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+  
+  next();
+});
 
 app.use(express.json());
 
