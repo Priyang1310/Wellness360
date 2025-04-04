@@ -1,4 +1,5 @@
 import PDFDocument from "pdfkit";
+import { cloudinary } from '../config/index.js';
 import markdownIt from "markdown-it";
 import { Readable } from "stream";
 
